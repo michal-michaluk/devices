@@ -41,4 +41,14 @@ public class DeviceConfigurationEditor {
     public void setLocation(Location location) {
         this.location = location;
     }
+
+    public Violations checkViolations() {
+        return Violations.builder()
+                .operatorNotAssigned(ownership.operator() == null)
+                .providerNotAssigned(ownership.provider() == null)
+                .locationMissing(location == null)
+                .showOnMapButMissingLocation(settings.showOnMap() && location == null)
+                .showOnMapButNoPublicAccess(settings.showOnMap() && !settings.publicAccess())
+                .build();
+    }
 }

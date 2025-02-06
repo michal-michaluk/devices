@@ -261,7 +261,14 @@ public class DeviceConfigurationEditorTest {
         // when - checking for violations
         var violations = device.checkViolations();
 
-        // then we expect ownership to be set in configuration
+        // then we expect the violations to be properly created
         assertNotNull(violations);
+
+        // then we check if the logic implemented is correct
+        assertTrue(violations.operatorNotAssigned());
+        assertTrue(violations.providerNotAssigned());
+        assertTrue(violations.locationMissing());
+        assertFalse(violations.showOnMapButMissingLocation());
+        assertFalse(violations.showOnMapButNoPublicAccess());
     }
 }
