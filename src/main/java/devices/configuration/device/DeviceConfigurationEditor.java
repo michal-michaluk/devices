@@ -51,4 +51,16 @@ public class DeviceConfigurationEditor {
                 .showOnMapButNoPublicAccess(settings.showOnMap() && !settings.publicAccess())
                 .build();
     }
+
+    public DeviceConfiguration toDeviceConfiguration() {
+        Violations violations = checkViolations();
+        return new DeviceConfiguration(
+                deviceId,
+                ownership,
+                location,
+                openingHours,
+                settings,
+                violations
+        );
+    }
 }
