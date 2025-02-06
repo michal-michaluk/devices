@@ -2,7 +2,9 @@ package devices.configuration.device;
 
 import devices.configuration.JsonAssert;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
+import static devices.configuration.JsonAssert.assertThat;
 import static devices.configuration.device.DevicesConfigurationFixture.someLocationInCity;
 import static devices.configuration.device.DevicesConfigurationFixture.someSettings;
 
@@ -17,7 +19,7 @@ public class DeviceConfigurationEditorTest {
         DeviceConfigurationEditor editor = DeviceConfigurationEditor.createNewDevice(deviceId);
 
         // then - verify state of the system after test
-        JsonAssert.assertThat(editor)
+        assertThat(editor)
                 .isExactlyLike("""
                         {
                           "deviceId": "ALF-98262561",
@@ -52,7 +54,7 @@ public class DeviceConfigurationEditorTest {
 
         // then we expect ownership to be set in configuration
 
-        JsonAssert.assertThat(device)
+        assertThat(device)
                 .isExactlyLike("""
                         {
                           "deviceId": "ALF-98262561",
@@ -101,7 +103,7 @@ public class DeviceConfigurationEditorTest {
 
         // then we expect device to be reset to new device state
 
-        JsonAssert.assertThat(device)
+        assertThat(device)
                 .isExactlyLike("""
                         {
                           "deviceId": "ALF-98262561",
@@ -131,7 +133,7 @@ public class DeviceConfigurationEditorTest {
 
         device.setLocation(someLocationInCity());
 
-        JsonAssert.assertThat(device)
+        assertThat(device)
                 .isExactlyLike("""
                         {
                           "deviceId": "ALF-98262561",
@@ -176,7 +178,7 @@ public class DeviceConfigurationEditorTest {
                 .build());
 
         // then - verify state of the system after test
-        JsonAssert.assertThat(device)
+        assertThat(device)
                 .isExactlyLike("""
                         {
                           "deviceId": "ALF-98262561",
@@ -217,7 +219,7 @@ public class DeviceConfigurationEditorTest {
                 .showOnMap(true)
                 .build());
         // then
-        JsonAssert.assertThat(device)
+        assertThat(device)
                 .isExactlyLike("""
                         {
                           "deviceId": "ALF-98262561",
@@ -249,5 +251,17 @@ public class DeviceConfigurationEditorTest {
                           }
                         }
                         """);
+    }
+
+    @Test
+    void testCheckViolations() {
+        // given new not configured device
+        var device = DeviceConfigurationEditor.createNewDevice(deviceId);
+
+        // when - checking for violations
+        var violations = device.checkViolations();
+
+        // then we expect ownership to be set in configuration
+        assertNotNull(violations);
     }
 }
