@@ -302,4 +302,49 @@ public class DeviceConfigurationEditorTest {
         assertFalse(violation.showOnMapButMissingLocation());
         assertFalse(violation.showOnMapButNoPublicAccess());
     }
+
+    @Test
+    void testCheckViolations_PartialOwnership() {
+        // given
+        var device = DeviceConfigurationEditor.createNewDevice(deviceId);
+        device.assignTo(new Ownership("operator", null));
+
+        // when
+        var violations = device.checkViolations();
+
+        // then
+        assertFalse(violations.operatorNotAssigned());
+        assertTrue(violations.providerNotAssigned());
+    }
+
+    @Test
+    void testCheckViolations_ShowOnMapButMissingLocation() {
+        // given
+        var device = DeviceConfigurationEditor.createNewDevice(deviceId);
+        device.setSettings(Settings.builder()
+                .showOnMap(true)
+                .build());
+
+        // when
+        var violations = device.checkViolations();
+
+        // then
+        assertTrue(violations.showOnMapButMissingLocation());
+    }
+
+    @Test
+    void testCheckViolations_ShowOnMapButNoPublicAccess() {
+        // given
+        var device = DeviceConfigurationEditor.createNewDevice(deviceId);
+        device.setSettings(Settings.builder()
+                .showOnMap(true)
+                .publicAccess(false)
+                .build());
+
+        // when
+        var violations = device.checkViolations();
+
+        // then
+        assertTrue(violations.showOnMapButNoPublicAccess());
+    }
 }
