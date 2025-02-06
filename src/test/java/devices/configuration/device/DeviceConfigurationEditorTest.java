@@ -271,4 +271,35 @@ public class DeviceConfigurationEditorTest {
         assertFalse(violations.showOnMapButMissingLocation());
         assertFalse(violations.showOnMapButNoPublicAccess());
     }
+
+    @Test
+    void createDeviceConfiguration() {
+        // given new not configured device
+        var editor = DeviceConfigurationEditor.createNewDevice(deviceId);
+
+        // assigning ownership
+        editor.assignTo(new Ownership("Devicex.nl", "public-devices"));
+        // setting new location
+        editor.setLocation(someLocationInCity());
+        // changing some settings
+        editor.setSettings(Settings.builder()
+                .publicAccess(true)
+                .showOnMap(true)
+                .build());
+
+        // when - constructing the DeviceConfiguration
+        DeviceConfiguration device = editor.toDeviceConfiguration();
+
+        // then
+        // test if the device is created properly
+        assertNotNull(device);
+
+        // checking for any violations
+        var violation = device.violations();
+        assertFalse(violation.operatorNotAssigned());
+        assertFalse(violation.providerNotAssigned());
+        assertFalse(violation.locationMissing());
+        assertFalse(violation.showOnMapButMissingLocation());
+        assertFalse(violation.showOnMapButNoPublicAccess());
+    }
 }
