@@ -19,4 +19,26 @@ public class DeviceConfigurationEditor {
                 Settings.defaultSetting()
         );
     }
+
+    public void assignTo(Ownership ownership) {
+        this.ownership = ownership;
+
+        if (this.ownership.isUnowned()) {
+            resetToDefault();
+        }
+    }
+
+    private void resetToDefault() {
+        setLocation(null);
+        this.openingHours = OpeningHours.alwaysOpened();
+        setSettings(Settings.defaultSetting());
+    }
+
+    public void setSettings(Settings settings) {
+        this.settings = this.settings.merge(settings);
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 }
