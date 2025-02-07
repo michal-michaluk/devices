@@ -20,7 +20,7 @@ public class DevicesConfigurationFixture {
         );
     }
 
-    static Settings.SettingsBuilder someSettings() {
+    public static Settings.SettingsBuilder someSettings() {
         return Settings.builder()
                 .publicAccess(true)
                 .showOnMap(true);
